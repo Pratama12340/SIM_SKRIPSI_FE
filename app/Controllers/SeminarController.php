@@ -5,7 +5,12 @@ class SeminarController extends Controller {
     public function index() {
         $this->requireAuth();
 
-        $res = ApiClient::request('GET', '/seminar/jadwal');
+        $params = [];
+        if (!empty($_GET['jenis_sidang'])) $params['jenis_sidang'] = $_GET['jenis_sidang'];
+        if (!empty($_GET['status'])) $params['status'] = $_GET['status'];
+        if (!empty($_GET['prodi_id'])) $params['prodi_id'] = $_GET['prodi_id'];
+
+        $res = ApiClient::request('GET', '/seminar/jadwal', $params);
         $seminarList = $res['data'] ?? [];
 
         $this->view('seminar/index', [

@@ -29,6 +29,44 @@ ob_start();
 
         <form method="POST" action="<?= url('/pengajuan/tambah') ?>" enctype="multipart/form-data" class="space-y-6">
 
+            <!-- Program Studi -->
+            <?php
+            $userProdiId = $_SESSION['user']['prodi_id'] ?? null;
+            $matchedProdi = null;
+            if (!empty($userProdiId) && !empty($prodiList)) {
+                foreach ($prodiList as $p) {
+                    if ((string)$p['id'] === (string)$userProdiId) {
+                        $matchedProdi = $p;
+                        break;
+                    }
+                }
+            }
+            ?>
+            <div>
+                <label for="prodi_id" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                    Program Studi Mahasiswa <span class="text-red-500">*</span>
+                </label>
+                <?php if ($matchedProdi): ?>
+                    <input type="hidden" name="prodi_id" value="<?= $matchedProdi['id'] ?>">
+                    <div class="p-3.5 rounded-xl border border-blue-200 bg-blue-50/50 flex items-center justify-between text-sm">
+                        <span class="font-bold text-blue-900 flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-blue-600"></i>
+                            <?= htmlspecialchars($matchedProdi['kodeProgramStudi'] . ' - ' . $matchedProdi['namaProgramStudi'] . (!empty($matchedProdi['namaFakultas']) ? ' (' . $matchedProdi['namaFakultas'] . ')' : '')) ?>
+                        </span>
+                        <span class="text-[11px] font-semibold text-blue-600 bg-white px-2.5 py-1 rounded-lg border border-blue-200">Sesuai Profil SSO</span>
+                    </div>
+                <?php else: ?>
+                    <select id="prodi_id" name="prodi_id" required class="w-full p-3.5 rounded-xl border border-gray-200 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-white">
+                        <option value="">-- Pilih Program Studi --</option>
+                        <?php foreach ($prodiList ?? [] as $prodi): ?>
+                            <option value="<?= $prodi['id'] ?>" <?= ((string)$userProdiId === (string)$prodi['id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($prodi['kodeProgramStudi'] . ' - ' . $prodi['namaProgramStudi']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+
             <!-- Judul Skripsi -->
             <div>
                 <label for="judul" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">

@@ -9,13 +9,29 @@ class PengajuanJudulController extends Controller {
         if (!empty($_GET['status'])) {
             $params['status'] = $_GET['status'];
         }
+        if (!empty($_GET['prodi_id'])) {
+            $params['prodi_id'] = $_GET['prodi_id'];
+        }
 
         $res = ApiClient::request('GET', '/pengajuan', $params);
         $pengajuanList = $res['data'] ?? [];
 
+        // Ambil info scope pengguna dan daftar prodi / fakultas yang berhak diakses
+        $scopeRes = ApiClient::request('GET', '/master/scope');
+        $scopeInfo = $scopeRes['data'] ?? null;
+
+        $prodiRes = ApiClient::request('GET', '/master/program-studi');
+        $prodiList = $prodiRes['data'] ?? [];
+
+        $fakultasRes = ApiClient::request('GET', '/master/fakultas');
+        $fakultasList = $fakultasRes['data'] ?? [];
+
         $this->view('pengajuan/index', [
             'title'         => 'Pengajuan Judul Skripsi — SIM Skripsi',
-            'pengajuanList' => $pengajuanList
+            'pengajuanList' => $pengajuanList,
+            'scopeInfo'     => $scopeInfo,
+            'prodiList'     => $prodiList,
+            'fakultasList'  => $fakultasList
         ]);
     }
 
@@ -25,9 +41,13 @@ class PengajuanJudulController extends Controller {
         $error = $_SESSION['pengajuan_error'] ?? null;
         unset($_SESSION['pengajuan_error']);
 
+        $prodiRes = ApiClient::request('GET', '/master/program-studi');
+        $prodiList = $prodiRes['data'] ?? [];
+
         $this->view('pengajuan/create', [
-            'title' => 'Ajukan Judul Skripsi Baru — SIM Skripsi',
-            'error' => $error
+            'title'     => 'Ajukan Judul Skripsi Baru — SIM Skripsi',
+            'error'     => $error,
+            'prodiList' => $prodiList
         ]);
     }
 
@@ -38,6 +58,7 @@ class PengajuanJudulController extends Controller {
             'judul'         => trim($_POST['judul'] ?? ''),
             'bidang_kajian' => trim($_POST['bidang_kajian'] ?? ''),
             'abstrak'       => trim($_POST['abstrak'] ?? ''),
+            'prodi_id'      => $_POST['prodi_id'] ?? ($_SESSION['user']['prodi_id'] ?? 1),
             'status'        => $_POST['status'] ?? 'diajukan'
         ];
 

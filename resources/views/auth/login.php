@@ -122,29 +122,55 @@ $logoSrc = file_exists($sourceLogo) ? 'data:image/png;base64,' . base64_encode(f
                 </button>
             </form>
 
-            <!-- Mode Cepat / Akun Demo -->
+            <!-- Mode Cepat / Akun Demo 5 Role SSO -->
             <div class="mt-6 pt-5 border-t border-slate-100">
                 <p class="text-center text-xs font-semibold text-slate-500 mb-3">
-                    Mode Pengujian Cepat (Quick Demo):
+                    Akses Cepat Pengujian 5 Peran (SSO):
                 </p>
-                <div class="grid grid-cols-3 gap-2 text-xs">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                     <a href="<?= url('/quick-login/mahasiswa') ?>"
-                       class="py-2.5 px-2 rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100/70 text-blue-800 font-bold text-center transition flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-user-graduate"></i>
+                       class="py-2 px-2 rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-800 font-bold text-center transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user-graduate text-blue-600"></i>
                         <span>Mahasiswa</span>
                     </a>
                     <a href="<?= url('/quick-login/dosen') ?>"
-                       class="py-2.5 px-2 rounded-lg border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100/70 text-emerald-800 font-bold text-center transition flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-chalkboard-user"></i>
+                       class="py-2 px-2 rounded-lg border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-800 font-bold text-center transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-chalkboard-user text-emerald-600"></i>
                         <span>Dosen</span>
                     </a>
+                    <a href="<?= url('/quick-login/admin_prodi') ?>"
+                       class="py-2 px-2 rounded-lg border border-amber-200 bg-amber-50/70 hover:bg-amber-100 text-amber-800 font-bold text-center transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-building-columns text-amber-600"></i>
+                        <span>Admin Prodi</span>
+                    </a>
+                    <a href="<?= url('/quick-login/admin_dekanat') ?>"
+                       class="py-2 px-2 rounded-lg border border-teal-200 bg-teal-50/70 hover:bg-teal-100 text-teal-800 font-bold text-center transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-landmark text-teal-600"></i>
+                        <span>Admin Dekanat</span>
+                    </a>
                     <a href="<?= url('/quick-login/admin') ?>"
-                       class="py-2.5 px-2 rounded-lg border border-purple-200 bg-purple-50/70 hover:bg-purple-100/70 text-purple-800 font-bold text-center transition flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span>Admin</span>
+                       class="py-2 px-2 rounded-lg border border-purple-200 bg-purple-50/70 hover:bg-purple-100 text-purple-800 font-bold text-center transition flex items-center justify-center gap-1.5 col-span-2 sm:col-span-1">
+                        <i class="fa-solid fa-user-shield text-purple-600"></i>
+                        <span>Admin Univ</span>
                     </a>
                 </div>
+
+                <!-- Info Kredensial SSO Asli (sim-mhs-api) -->
+                <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600">
+                    <p class="font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-blue-600"></i>
+                        <span>Kredensial SSO (https://sim-mhs-api.vercel.app):</span>
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-slate-500">
+                        <div>• <b>Mahasiswa</b>: <code class="text-blue-700 cursor-pointer hover:underline" onclick="fillCred('mhs001','Mhs12345!')">mhs001 / Mhs12345!</code></div>
+                        <div>• <b>Dosen</b>: <code class="text-emerald-700 cursor-pointer hover:underline" onclick="fillCred('dosen01','Dosen123!')">dosen01 / Dosen123!</code></div>
+                        <div>• <b>Admin Prodi</b>: <code class="text-amber-700 cursor-pointer hover:underline" onclick="fillCred('adm_prodi_ti','AdmProdi123!')">adm_prodi_ti / AdmProdi123!</code></div>
+                        <div>• <b>Admin Dekanat</b>: <code class="text-teal-700 cursor-pointer hover:underline" onclick="fillCred('adm_dekanat','AdmDekan123!')">adm_dekanat / AdmDekan123!</code></div>
+                        <div class="sm:col-span-2">• <b>Admin Univ</b>: <code class="text-purple-700 cursor-pointer hover:underline" onclick="fillCred('admin','Admin123!')">admin / Admin123!</code></div>
+                    </div>
+                </div>
             </div>
+
 
         </div>
 
@@ -156,8 +182,18 @@ $logoSrc = file_exists($sourceLogo) ? 'data:image/png;base64,' . base64_encode(f
 
 </div>
 
-<!-- Toggle password script -->
+<!-- Toggle password script & auto-fill helper -->
 <script>
+function fillCred(u, p) {
+    var uInput = document.getElementById('username');
+    var pInput = document.getElementById('password');
+    if (uInput && pInput) {
+        uInput.value = u;
+        pInput.value = p;
+        uInput.focus();
+    }
+}
+
 (function () {
     var btn = document.getElementById('btn-toggle-password');
     var input = document.getElementById('password');
@@ -173,6 +209,7 @@ $logoSrc = file_exists($sourceLogo) ? 'data:image/png;base64,' . base64_encode(f
     });
 })();
 </script>
+
 
 <?php 
 $content = ob_get_clean(); 

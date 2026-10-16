@@ -1,8 +1,11 @@
 <?php
 
 return [
-    // Dashboard & Beranda
-    ['method' => 'GET',  'path' => '/',            'controller' => 'DashboardController',      'action' => 'index'],
+    // Landing Page / Beranda Utama
+    ['method' => 'GET',  'path' => '/',            'controller' => 'LandingController',        'action' => 'index'],
+    ['method' => 'GET',  'path' => '/beranda',     'controller' => 'LandingController',        'action' => 'index'],
+
+    // Dashboard Internal (Memerlukan Autentikasi)
     ['method' => 'GET',  'path' => '/dashboard',   'controller' => 'DashboardController',      'action' => 'index'],
 
     // Autentikasi SSO & Quick Login
